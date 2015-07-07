@@ -52,12 +52,36 @@ module.exports = function(grunt) {
       tests: ['test/*_test.js']
     },
     // Unit tests.
-    new_module: {
+    create-module: {
       blah: {
         options: {
         },
         files: {
-          '.': ['js','html','scss','copy','images']
+          '.': [
+            {
+              'name':'js',
+              'contents':[]
+            },
+            {
+              'name':'html',
+              'contents':['*.html']
+            },
+            {
+              'name':'css',
+              'contents':[{
+                'name':'scss',
+                'contents':['*-style.scss']
+              }]
+            },
+            {
+              'name':'copy',
+              'contents':['*-content.json']
+            },
+            {
+              'name':'images',
+              'contents':[]
+            }
+          ]
         }
       }
     }
