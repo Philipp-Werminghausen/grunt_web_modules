@@ -52,7 +52,7 @@ module.exports = function(grunt) {
       tests: ['test/*_test.js']
     },
     // Unit tests.
-    create-module: {
+    create_module: {
       blah: {
         options: {
         },

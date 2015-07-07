@@ -46,7 +46,7 @@ module.exports = function (grunt) {
     //         grunt.log.writeln('File "' + f.dest + '" created.');
     //     });
     // });
-    grunt.registerMultiTask('create-module', 'Create ground structure of a web-module', function () {
+    grunt.registerMultiTask('create_module', 'Create ground structure of a web-module', function () {
         // Merge task-specific and/or target-specific options with these defaults.
         var fs = require('fs-extra');
         var options = this.options({
