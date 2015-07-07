@@ -9,7 +9,6 @@
 'use strict';
 
 module.exports = function(grunt) {
-
   // Project configuration.
   grunt.initConfig({
     jshint: {
@@ -51,6 +50,16 @@ module.exports = function(grunt) {
     // Unit tests.
     nodeunit: {
       tests: ['test/*_test.js']
+    },
+    // Unit tests.
+    new_module: {
+      blah: {
+        options: {
+        },
+        files: {
+          '.': ['js','html','scss','copy','images']
+        }
+      }
     }
 
   });
