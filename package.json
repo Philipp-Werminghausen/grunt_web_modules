@@ -1,7 +1,7 @@
 {
   "name": "grunt_web_modules",
   "description": "Self contained web-modules(templates/partials) (html-css-js-other)",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "homepage": "https://github.com/Philipp-Werminghausen/grunt_web_modules",
   "author": {
     "name": "Philipp Werminghausen",
