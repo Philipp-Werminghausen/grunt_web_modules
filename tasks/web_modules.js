@@ -13,51 +13,16 @@ module.exports = function (grunt) {
     // Please see the Grunt documentation for more information regarding task
     // creation: http://gruntjs.com/creating-tasks
 
-    // grunt.registerMultiTask('web_modules', 'Self contained web-modules(templates/partials) (html-css-js-other)', function () {
-    //     // Merge task-specific and/or target-specific options with these defaults.
-    //     var options = this.options({
-    //         punctuation: '.',
-    //         separator: ', '
-    //     });
-
-    //     // Iterate over all specified file groups.
-    //     this.files.forEach(function (f) {
-    //         // Concat specified files.
-    //         var src = f.src.filter(function (filepath) {
-    //             // Warn on and remove invalid source files (if nonull was set).
-    //             if (!grunt.file.exists(filepath)) {
-    //                 grunt.log.warn('Source file "' + filepath + '" not found.');
-    //                 return false;
-    //             } else {
-    //                 return true;
-    //             }
-    //         }).map(function (filepath) {
-    //             // Read file source.
-    //             return grunt.file.read(filepath);
-    //         }).join(grunt.util.normalizelf(options.separator));
-
-    //         // Handle options.
-    //         src += options.punctuation;
-
-    //         // Write the destination file.
-    //         grunt.file.write(f.dest, src);
-
-    //         // Print a success message.
-    //         grunt.log.writeln('File "' + f.dest + '" created.');
-    //     });
-    // });
+    grunt.registerMultiTask('build_module', 'Building the self-contained module', build_module);
     grunt.registerMultiTask('create_module', 'Create ground structure of a web-module', function () {
         // Merge task-specific and/or target-specific options with these defaults.
-        var fs = require('fs-extra');
-        var options = this.options({
-            name:grunt.option('name') || "new_module"
-        });
+        var fs = require('fs-extra'),
+            options = this.options({
+                name:grunt.option('name') || "new_module"
+            }),
+            dir = this.files[0].dest  + '/' + options.name;
 
-        var dir = this.files[0].dest  + '/' + options.name;
-
-        fs.ensureDir( dir, function(err){
-            console.log(err);
-        });
+        createFolder(dir);
 
         forEachFolder(dir,this.files[0].orig.src);
 
@@ -83,10 +48,57 @@ module.exports = function (grunt) {
             fs.writeFile(file, '', function (err) {
                 if (err) return console.log(err);
             });
-            // fs.ensureFile( file, function(err) {
-            //     console.log(err);
-            // });
         }
     });
+    var fs = require('fs-extra');
+
+    function build_module(module) {
+        var options = this.options({
+            module:module || grunt.option('module') || false
+        })
+        if(!options.module){
+            console.log('Please provide the module you want to build as a parameter.');
+            console.log('Ex. >  grunt build_module --module=module-name');
+            return false;
+        }
+        //check if module exists --(triv)
+        //if not return false with message --(triv)
+        var path = this.files[0].dest + '/' + options.module + '/html/' + options.module + '.html'
+        var module = getFile(path);
+        var grabDependanciesRexExp = new RegExp('<!-- module:scripts:shared -->((.|\n)*)?<!-- \/module:scripts:shared -->');
+        var match = module.match(grabDependanciesRexExp).map(function(val){
+           return val.replace(/<!-- \/?module:scripts:shared -->/s,'');
+        });
+        console.log(module);
+        console.log(match);
+        //get array of dependantcies modules
+        //build dependancy modules
+
+        //insert copy
+
+        //grab scripts from Depencancies
+        //grab styles from Depencancies
+        //insert dependancies
+        //copy scripts/styles from dempenancies modules (resolve naming conflicts / overwrites)
+
+        //grab scripts
+        //grab styles
+
+        //styles unique
+        //styles update reference unique
+
+        //scripts unique
+        //scripts update reference unique
+
+        //insert scripts
+        //insert styles
+
+        //return module
+
+    };
+    function getFile(path) {
+        console.log('Trying to read this file : ' + path);
+        return fs.readFileSync(path,{'encoding':'utf8'});
+    }
 
 };

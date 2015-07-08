@@ -10,54 +10,17 @@
 
 module.exports = function(grunt) {
   // Project configuration.
+  grunt.loadNpmTasks('grunt-processhtml');
   grunt.initConfig({
-    jshint: {
-      all: [
-        'Gruntfile.js',
-        'tasks/*.js',
-        '<%= nodeunit.tests %>'
-      ],
-      options: {
-        jshintrc: '.jshintrc'
-      }
-    },
-
-    // Before generating any new files, remove any previously-created files.
-    clean: {
-      tests: ['tmp']
-    },
-
-    // Configuration to be run (and then tested).
-    web_modules: {
-      default_options: {
-        options: {
-        },
-        files: {
-          'tmp/default_options': ['test/fixtures/testing', 'test/fixtures/123']
-        }
-      },
-      custom_options: {
-        options: {
-          separator: ': ',
-          punctuation: ' !!!'
-        },
-        files: {
-          'tmp/custom_options': ['test/fixtures/testing', 'test/fixtures/123']
-        }
-      }
-    },
-
-    // Unit tests.
-    nodeunit: {
-      tests: ['test/*_test.js']
-    },
+    moduleDirBase: '.',
+    module: grunt.option('module') || '',
     // Unit tests.
     create_module: {
       blah: {
         options: {
         },
         files: {
-          '.': [
+          '<%= moduleDirBase %>': [
             {
               'name':'js',
               'contents':[]
@@ -84,23 +47,33 @@ module.exports = function(grunt) {
           ]
         }
       }
+    },/* create_module */
+    build_module: {
+      blah: {
+        options: {
+        },
+        files: {
+          '<%= moduleDirBase %>': []
+        }
+      }
+    },/* create_module */
+    processhtml: {
+      options: {
+        data: {
+          message: 'Hello world!'
+        },
+        customBlockTypes: ['./node_modules/grunt-processhtml/node_modules/htmlprocessor/lib/dependant.js']
+      },
+      dist: {
+        files: {
+          '<%= module %>/build/<%= module %>.html': ['<%= module %>/html/<%= module %>.html']
+        }
+      }
     }
 
   });
 
   // Actually load this plugin's task(s).
   grunt.loadTasks('tasks');
-
-  // These plugins provide necessary tasks.
-  grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-contrib-nodeunit');
-
-  // Whenever the "test" task is run, first clean the "tmp" dir, then run this
-  // plugin's task(s), then test the result.
-  grunt.registerTask('test', ['clean', 'web_modules', 'nodeunit']);
-
-  // By default, lint and run all tests.
-  grunt.registerTask('default', ['jshint', 'test']);
 
 };
